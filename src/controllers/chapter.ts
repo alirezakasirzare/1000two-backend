@@ -11,7 +11,7 @@ import {
   NOT_FOUND_JSON,
 } from "@libs/format-response";
 
-export const getAllChapters = async (
+export const handleGetAllChapters = async (
   req: Request<{}, {}, {}>,
   res: Response
 ) => {
@@ -26,7 +26,25 @@ export const getAllChapters = async (
   res.status(StatusCodes.OK).json(formatPaginationResponse(chapters, meta));
 };
 
-export const getOneChapter = async (
+export const handleGetAllStepsByChapterId = async (
+  req: Request<{ id: string }, {}, {}>,
+  res: Response
+) => {
+  const paginationData = formatTargetPagination(req.query);
+
+  const [steps, meta] = await prisma.step
+    .paginate({
+      where: {
+        chapterId: req.params.id,
+      },
+      orderBy: { createdAt: "desc" },
+    })
+    .withPages(paginationData);
+
+  res.status(StatusCodes.OK).json(formatPaginationResponse(steps, meta));
+};
+
+export const handleGetOneChapterById = async (
   req: Request<{ id: string }, {}, {}>,
   res: Response
 ) => {
@@ -44,7 +62,7 @@ export const getOneChapter = async (
   res.status(StatusCodes.OK).json(formatOkJsonResponse(chapter));
 };
 
-export const createOneChapter = async (
+export const handleCreateOneChapter = async (
   req: Request<{}, {}, CreateChapterSchema>,
   res: Response
 ) => {
@@ -58,7 +76,7 @@ export const createOneChapter = async (
   res.status(StatusCodes.CREATED).json(formatOkJsonResponse(chapter));
 };
 
-export const updateOneChapter = async (
+export const handleUpdateOneChapter = async (
   req: Request<{ id: string }, {}, UpdateChapterSchema>,
   res: Response
 ) => {
@@ -75,7 +93,7 @@ export const updateOneChapter = async (
   res.status(StatusCodes.OK).json(formatOkJsonResponse(chapter));
 };
 
-export const deleteOneChapter = async (
+export const handleDeleteOneChapter = async (
   req: Request<{ id: string }, {}, {}>,
   res: Response
 ) => {

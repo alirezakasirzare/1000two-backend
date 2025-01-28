@@ -19,8 +19,8 @@ model Chapter {
   description String
   steps       Step[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("chapter")
 }
@@ -31,12 +31,12 @@ model Step {
   description String
   question    String
   answer      String
-  chapterId   String
+  chapterId   String @map("chapter_id")
 
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("step")
 }

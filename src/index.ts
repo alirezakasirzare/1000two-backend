@@ -8,6 +8,7 @@ dotenv.config();
 import { chapterRouter } from "@routers/chapter";
 import { errorHandler } from "@middlewares/error-handler";
 import { applicationDocs } from "./docs";
+import { stepRouter } from "@routers/step";
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use("/api/chapter", chapterRouter);
+app.use("/api/step", stepRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(applicationDocs));
 
