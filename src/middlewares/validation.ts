@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
 import { z, ZodError } from "zod";
 
-import { StatusCodes } from "http-status-codes";
+import {
+  formatBadRequestJsonError,
+  SERVER_ERROR_JSON,
+} from "@libs/format-response";
 
 export function validateBody(schema: z.ZodObject<any, any>) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -15,11 +19,9 @@ export function validateBody(schema: z.ZodObject<any, any>) {
         }));
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: "Invalid data", details: errorMessages });
+          .json(formatBadRequestJsonError(errorMessages));
       } else {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: "Internal Server Error" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(SERVER_ERROR_JSON);
       }
     }
   };

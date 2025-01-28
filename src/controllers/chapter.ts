@@ -1,10 +1,15 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 
-import { prisma } from "@libs/db";
-import { NOT_FOUND_JSON } from "@libs/format-errors";
 import { CreateChapterSchema, UpdateChapterSchema } from "@schemas/chapter";
 import { formatTargetPagination } from "@libs/pagination";
+import { prisma } from "@libs/db";
+
+import {
+  formatOkJsonResponse,
+  formatPaginationResponse,
+  NOT_FOUND_JSON,
+} from "@libs/format-response";
 
 export const getAllChapters = async (
   req: Request<{}, {}, {}>,
@@ -12,13 +17,13 @@ export const getAllChapters = async (
 ) => {
   const paginationData = formatTargetPagination(req.query);
 
-  const chapters = await prisma.chapter
+  const [chapters, meta] = await prisma.chapter
     .paginate({
       orderBy: { createdAt: "desc" },
     })
     .withPages(paginationData);
 
-  res.json(chapters);
+  res.status(StatusCodes.OK).json(formatPaginationResponse(chapters, meta));
 };
 
 export const getOneChapter = async (
@@ -36,7 +41,7 @@ export const getOneChapter = async (
     return;
   }
 
-  res.json(chapter);
+  res.status(StatusCodes.OK).json(formatOkJsonResponse(chapter));
 };
 
 export const createOneChapter = async (
@@ -50,7 +55,7 @@ export const createOneChapter = async (
     },
   });
 
-  res.json(chapter);
+  res.status(StatusCodes.CREATED).json(formatOkJsonResponse(chapter));
 };
 
 export const updateOneChapter = async (
@@ -67,19 +72,18 @@ export const updateOneChapter = async (
     },
   });
 
-  res.json(chapter);
+  res.status(StatusCodes.OK).json(formatOkJsonResponse(chapter));
 };
 
 export const deleteOneChapter = async (
   req: Request<{ id: string }, {}, {}>,
   res: Response
 ) => {
-  throw new Error("Salam");
-  //   const chapter = await prisma.chapter.delete({
-  //     where: {
-  //       id: req.params.id,
-  //     },
-  //   });
+  const chapter = await prisma.chapter.delete({
+    where: {
+      id: req.params.id,
+    },
+  });
 
-  //   res.json(chapter);
+  res.status(StatusCodes.OK).json(formatOkJsonResponse(chapter));
 };
