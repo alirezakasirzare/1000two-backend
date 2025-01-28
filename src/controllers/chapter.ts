@@ -4,9 +4,20 @@ import { Request, Response } from "express";
 import { prisma } from "@libs/db";
 import { NOT_FOUND_JSON } from "@libs/format-errors";
 import { CreateChapterSchema, UpdateChapterSchema } from "@schemas/chapter";
+import { formatTargetPagination } from "@libs/pagination";
 
-export const getAllChapters = async (req: Request, res: Response) => {
-  const chapters = await prisma.chapter.findMany();
+export const getAllChapters = async (
+  req: Request<{}, {}, {}>,
+  res: Response
+) => {
+  const paginationData = formatTargetPagination(req.query);
+
+  const chapters = await prisma.chapter
+    .paginate({
+      orderBy: { createdAt: "desc" },
+    })
+    .withPages(paginationData);
+
   res.json(chapters);
 };
 
