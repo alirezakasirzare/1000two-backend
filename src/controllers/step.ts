@@ -1,9 +1,9 @@
-import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
+import { prisma } from "@libs/db";
 import { formatOkJsonResponse, NOT_FOUND_JSON } from "@libs/format-response";
 import { CreateStepSchema, UpdateStepSchema } from "@schemas/step";
-import { prisma } from "@libs/db";
 
 export const handleGetOneStepById = async (
   req: Request<{ id: string }, {}, {}>,
@@ -33,7 +33,7 @@ export const handleCreateOneStep = async (
       description: req.body.description,
       question: req.body.question,
       answer: req.body.answer,
-      chapterId: req.body.chapter_id,
+      chapterId: req.body.chapterId,
     },
   });
 

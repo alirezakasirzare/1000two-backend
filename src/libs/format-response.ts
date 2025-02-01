@@ -8,6 +8,16 @@ export const SERVER_ERROR_JSON = {
   error: "Server Error",
 };
 
+export const UNAUTHORIZED_ERROR_JSON = {
+  success: false,
+  error: "Unauthorized Error",
+};
+
+export const FORBIDDEN_ERROR_JSON = {
+  success: false,
+  error: "Forbidden Resource",
+};
+
 export const formatBadRequestJsonError = (detail: any) => {
   return {
     success: false,
@@ -34,15 +44,9 @@ export const formatPaginationResponse = (
 ) => {
   return {
     success: true,
-    data,
-    meta: {
-      is_first_page: meta.isFirstPage,
-      is_last_page: meta.isLastPage,
-      current_page: meta.currentPage,
-      previous_page: meta.previousPage,
-      next_page: meta.nextPage,
-      page_count: meta.pageCount,
-      total_count: meta.totalCount,
+    data: {
+      items: data,
+      meta,
     },
   };
 };

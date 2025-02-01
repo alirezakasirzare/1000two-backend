@@ -13,6 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  User
+  GameDesignerAdmin
+  SuperAdmin
+}
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  hashedPassword String   @map("hashed_password")
+  role           UserRole @default(User)
+
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
 model Chapter {
   id          String @id @default(cuid())
   name        String

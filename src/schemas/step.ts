@@ -6,7 +6,7 @@ export const createStepSchema = z.object({
   description: z.string().min(1),
   question: z.string().min(1),
   answer: z.string().min(1),
-  chapter_id: z.string().min(1),
+  chapterId: z.string().min(1),
 });
 
 export type CreateStepSchema = z.infer<typeof createStepSchema>;
@@ -14,6 +14,6 @@ export type CreateStepSchema = z.infer<typeof createStepSchema>;
 // update PUT
 export const updateStepSchema = createStepSchema
   .partial()
-  .omit({ chapter_id: true });
+  .omit({ chapterId: true });
 
 export type UpdateStepSchema = z.infer<typeof updateStepSchema>;
