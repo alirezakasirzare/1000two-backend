@@ -9,4 +9,9 @@ export const authDocs = {
       tags: ["auth"],
     },
   },
+  "/api/auth/me": {
+    get: {
+      tags: ["auth"],
+    },
+  },
 };
